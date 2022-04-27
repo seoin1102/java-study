@@ -1,0 +1,20 @@
+package chapter3;
+
+import java.util.Arrays;
+
+public class ArrayUtilTest {
+
+	public static void main(String[] args) {
+		double[] d1 = ArrayUtil.intToDouble(new int[]{10, 20, 30, 40});
+//		for(double d: d1) {
+//			System.out.println(d);
+//		}
+		System.out.println(Arrays.toString(d1));
+		
+		int[] a1 = ArrayUtil.doublePoint(new double[]{10.1, 20.1, 30.1, 40.1});
+		
+		//int[] a2 = ArrayUtil.concat(new int[]{1, 2, 3}, new int[]{4, 5, 6});
+
+	}
+
+}

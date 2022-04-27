@@ -8,7 +8,18 @@ public class GoodsApp {
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
 
-		Goods[] goods = new Goods[COUNT_GOODS];
+		//Goods[] goods = new Goods[COUNT_GOODS];
+		for(int i = 0; i < COUNT_GOODS; i++) {
+			String line = scanner.nextLine();
+			System.out.println(line);
+			String[] datas = line.split(" ");
+			
+			String name = datas[0];
+			int price = Integer.parseInt(datas[1]);
+			int count = Integer.parseInt(datas[2]);
+			
+			System.out.println(name + ":" + price + ":" + count);
+		}
 
 		// 상품 입력
 
