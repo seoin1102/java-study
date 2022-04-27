@@ -11,6 +11,7 @@ public class Prob04 {
 	
 	public static char[] reverse(String str) {
 		/* 코드를 완성합니다 */
+		for(int i=-1; i < str.length(); )
 		return null;
 	}
 
