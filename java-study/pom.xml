@@ -5,7 +5,6 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<modules>
-		<module>chapter03</module>
 		<module>practice01</module>
 		<module>practice3</module>
 		<module>practice02</module>
