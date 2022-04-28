@@ -1,8 +1,9 @@
 package paint;
 
-public class Triangle {
+public class Triangle extends Shape {
 	private int x1, y1;
 	
+	@Override
 	public void draw() {
 		System.out.println("삼각형을 그렸습니다.");
 	}

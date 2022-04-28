@@ -9,36 +9,61 @@ public class Main {
 		  
 		//point1.show();
 		Point point1 = new Point(20, 10);
-		drawPoint(point1);
+		draw(point1);
 		
 		Point point2 = new Point(50, 100);
 		//point2.show();
-		drawPoint(point2);
+		draw(point2);
 		//point2.disapear();
 		point2.show(false);
 
 		Point point3 = new ColorPoint(40, 50, "red");
-		drawPoint(point3);
+		draw(point3);
 		//point3.show(true);
 		
 		Triangle triangle = new Triangle();
-		drawTriangle(triangle);
+		draw(triangle);
 		
 		Rectangle rectangle = new Rectangle();
-		drawRectangle(rectangle);
-	}
-	private static void drawRectangle(Rectangle rectangle) {
-		rectangle.draw();
+		draw(rectangle);
 		
-	}
-	private static void drawTriangle(Triangle triangle) {
-		triangle.draw(); 
+		Circle circle = new Circle();
+		draw(circle);
+		GraphicText graphicText = new GraphicText("HelloWorld");
+		draw(graphicText);
 		
-	}
-	public static void drawPoint(Point point) {
-		point.show();
+		// instanceof 연산자 테스트
+		System.out.println(circle instanceof Object);
+		System.out.println(circle instanceof Shape);
+		System.out.println(circle instanceof Circle);
 		
+		// 오류: class는 Hierachy 상위와 하위만 instanceof 연산자를 사용할 수 없음.
+		// System.out.println(circle instanceof Rectangle);
+
+		// interface는 hierachy와 상관없이 instanceof 연산자를 사용할 수 있음.
+		System.out.println(circle instanceof Drawable);
+		System.out.println(circle instanceof Runnable);
+
 	}
+	
+	public static void draw(Drawable drawable) {
+		drawable.draw();
+	}
+//	private static void drawRectangle(Rectangle rectangle) {
+//		rectangle.draw();
+//		
+//	}
+//	private static void drawTriangle(Triangle triangle) {
+//		triangle.draw(); 
+//		
+//	}
+//	public static void drawPoint(Point point) {
+//		point.show();
+//		
+//	}
+//	public static void drawShape(Shape shape) {
+//		shape.draw();
+//	}
 //	public static void drawColorPoint(ColorPoint point) {
 //		point.show();
 //	}
