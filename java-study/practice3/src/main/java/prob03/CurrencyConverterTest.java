@@ -1,9 +1,12 @@
 package prob03;
 
+import java.util.Scanner;
+
 public class CurrencyConverterTest {
 
 	public static void main(String[] args) {
 		//  환율을 세팅 합니다.
+
 		CurrencyConverter.setRate(1197.0);
 		
 		double dollar = CurrencyConverter.toDollar( 1000000 );

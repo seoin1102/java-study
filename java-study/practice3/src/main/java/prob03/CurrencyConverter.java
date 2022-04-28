@@ -9,4 +9,14 @@ public class CurrencyConverter {
 
 	}
 
+	public static double toDollar(int i) {
+		
+		return 0;
+	}
+
+	public static double toKRW(double d) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }
