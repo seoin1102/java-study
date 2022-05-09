@@ -7,7 +7,7 @@ import java.net.InetSocketAddress;
 import java.net.SocketException;
 import java.util.Scanner;
 
-public class UCPEchoClient {
+public class UDPEchoClient {
 	private static final String SERVER_IP = "";
 	private static final int SERVER_PORT = UDPEchoServer.PORT;
 	private static final int BUFFER_SIZE = UDPEchoServer.BUFFER_SIZE;
