@@ -44,6 +44,17 @@ public class ChatWindow {
 
 		// Textfield
 		textField.setColumns(80);
+		textField.addKeyListener(new KeyAdapter() {
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				char keyCode = e.getKeyChar();
+				if(keyCode == KeyEvent.VK_ENTER) {
+					sendMessage();
+				}
+			}
+			
+		});
 
 		// Pannel
 		pannel.setBackground(Color.LIGHT_GRAY);
@@ -58,7 +69,7 @@ public class ChatWindow {
 		// Frame
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
-				System.exit(0);
+				finish();
 			}
 		});
 		frame.setVisible(true);
@@ -73,18 +84,35 @@ public class ChatWindow {
 	}
 	
 	private void sendMessage() {
+		String message = textField.getText();
+		System.out.println("메시지 보내는 프로토콜 구현:" + message);
+		textField.setText("");
+		textField.requestFocus();
+		
+		// Chat Client Thread에서 서버로 부터 받은 메시지가 있다고 치고~~(mock data)
+		updateTextArea("마이콜:"+message);
 	}
 	
 	private void updateTextArea(String message) {
 		textArea.append(message);
 		textArea.append("\n");
+		
 	}
+	private void finish() {
+		System.out.println("소켓 닫기 or 방나가기(QUIT) 프로토콜 구현");
+		System.exit(0);
+	}
+	
+	/**
+	 * 
+	 * Receive Thread from Chat Server
+	 * 
+	 */
 	private class ChatClientThread extends Thread{
 
 		@Override
 		public void run() {
-			String message = "둘리:안녕";
-			updateTextArea(message);
+			
 		}
 		
 	}
