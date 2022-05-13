@@ -32,8 +32,8 @@ public class ChatServerThread extends Thread {
 		
 		try {	
 			//2. 스트림 얻기
-			BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
-			PrintWriter pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"), true);
+			br = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
+			pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"), true);
 			
 			//3. 요청 처리
 			while(true) {
@@ -43,12 +43,13 @@ public class ChatServerThread extends Thread {
 				    doQuit( pw );
 				    break;
 
-				}	
+				}
+			
 				
 				//4. 프로토콜 분석
 				String[] tokens = request.split( ":" );
 
-			if( "join".equals( tokens[0] ) ) {
+				if( "join".equals( tokens[0] ) ) {
 
 				   doJoin( tokens[1], pw );
 
