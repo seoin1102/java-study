@@ -2,43 +2,48 @@ package chat;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ChatServer {
-	
+	private static final String IP= "192.168.10.16";
 	private static final int PORT = 4000;
+	private static List<Writer> listWriters;
 	
 	public static void main(String[] args) {
 		ServerSocket serverSocket = null;
-		// 1. 서버 소겟 생성
+		listWriters = new ArrayList<Writer>();
 		try {
-			List<Writer> listWriters = new ArrayList<Writer>();
+			//1. 서버 소켓 생성
 			serverSocket = new ServerSocket();
-						
-			// 2. 바인딩
-			String hostAddress = InetAddress.getLocalHost().getHostAddress();
-			serverSocket.bind( new InetSocketAddress( hostAddress, PORT ) );
-			log( "연결 기다림 " + hostAddress + ":" + PORT );
-		
-			// 3. 요청 대기 
-			while( true ) {
-			   Socket socket = serverSocket.accept();
-			   new ChatServerThread(socket, listWriters ).start();}
-				} catch (IOException e) {
-					e.printStackTrace();
-			}			
-		}
+			
+			//2. 바인딩
+			serverSocket.bind(new InetSocketAddress(IP, PORT));
+			log( "연결 기다림 "  + IP + ":" + PORT);
+			
+			//3. 요청 대기
+			while(true) {
+				Socket socket = serverSocket.accept();
+				new ChatServerThread( socket, listWriters ).start();
 
-	public static void log(String log) {
-		System.out.println(log);
+			}
+		} catch (IOException e) {
+			log(" error:" + e);
+		} finally {
+			try {
+				if(serverSocket != null && !serverSocket.isClosed()) {
+					serverSocket.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
+	public static void log(String log) {
+		System.out.println("[Chat Server] " + log);
+	}
 }
