@@ -44,10 +44,13 @@ public class ChatClient {
 		      System.out.print( ">>" );
 		      String input = scanner.nextLine();
 							
-		      if("quit".equals(input) == true)
+		      if("quit".equals(input)) {
 					break;
-				else
+		      }else if("".equals(input)) {
+		    	  
+		      }else {
 					pw.println("message:"+input);
+					}
 			}
 		} catch (IOException e) {
 			log("error:" + e);
