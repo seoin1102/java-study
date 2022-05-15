@@ -12,21 +12,40 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.nio.charset.StandardCharsets;
+
+import chat.ChatServer;
 
 public class ChatWindow {
-
+    private String name;
 	private Frame frame;
 	private Panel pannel;
 	private Button buttonSend;
 	private TextField textField;
 	private TextArea textArea;
 
-	public ChatWindow(String name) {
+    private Socket socket;
+	private PrintWriter pw;
+
+
+	public ChatWindow(String name, Socket socket) {
 		frame = new Frame(name);
 		pannel = new Panel();
 		buttonSend = new Button("Send");
 		textField = new TextField();
 		textArea = new TextArea(30, 80);
+        this.name = name;
+        this.socket = socket;
+
+		new ChatClientThread(socket).start();
+		
 	}
 
 	public void show() {
@@ -39,6 +58,7 @@ public class ChatWindow {
 		buttonSend.addActionListener(
 			( ActionEvent actionEvent ) -> {
 				System.out.println("clicked!!");
+				sendMessage();
 			}
 		);
 
@@ -69,6 +89,16 @@ public class ChatWindow {
 		// Frame
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
+				PrintWriter pw;
+                try {
+                    pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8), true);
+                    String request = "quit";
+                    pw.println(request);
+                    System.exit(0);
+                }
+                catch (IOException e1) {
+                    e1.printStackTrace();
+                }
 				finish();
 			}
 		});
@@ -84,13 +114,23 @@ public class ChatWindow {
 	}
 	
 	private void sendMessage() {
-		String message = textField.getText();
-		System.out.println("메시지 보내는 프로토콜 구현:" + message);
-		textField.setText("");
-		textField.requestFocus();
+        PrintWriter pw;
+        try {
+        	pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8), true);
+			String message = textField.getText();
+			String request = "message:" + message;
+			System.out.println("메시지 보내는 프로토콜 구현:" + message);
+			pw.println(request);
+			textField.setText("");
+			textField.requestFocus();
+			
+			// Chat Client Thread에서 서버로 부터 받은 메시지가 있다고 치고~~(mock data)
+			updateTextArea(message);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
 		
-		// Chat Client Thread에서 서버로 부터 받은 메시지가 있다고 치고~~(mock data)
-		updateTextArea("마이콜:"+message);
 	}
 	
 	private void updateTextArea(String message) {
@@ -99,8 +139,14 @@ public class ChatWindow {
 		
 	}
 	private void finish() {
-		System.out.println("소켓 닫기 or 방나가기(QUIT) 프로토콜 구현");
-		System.exit(0);
+        try {
+			if(socket != null && !socket.isClosed())
+				socket.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			System.exit(0);
+		}
 	}
 	
 	/**
@@ -108,12 +154,37 @@ public class ChatWindow {
 	 * Receive Thread from Chat Server
 	 * 
 	 */
-	private class ChatClientThread extends Thread{
-
-		@Override
-		public void run() {
-			
+	public class ChatClientThread extends Thread{
+		Socket socket = null;
+		public ChatClientThread(Socket socket) {
+			this.socket = socket;
 		}
 		
-	}
+		@Override
+		public void run() {	
+			//1. Remote Host Information
+			InetSocketAddress inetSocketAddress = (InetSocketAddress)socket.getRemoteSocketAddress();
+			String remoteHostAddress = inetSocketAddress.getAddress().getHostAddress();
+			int remoteHostPort = inetSocketAddress.getPort();
+			ChatServer.log("connected by client[" + remoteHostAddress + ":" + remoteHostPort + "]");
+			
+			try {
+                BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
+                while(true) {
+                    String message = br.readLine();
+                    
+                  
+                    textArea.append(message);
+                    textArea.append("\n");
+                }
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+		}
+		
+			}
+
+		
+	
 }
