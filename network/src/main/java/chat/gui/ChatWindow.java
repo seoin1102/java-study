@@ -96,8 +96,8 @@ public class ChatWindow {
                     pw.println(request);
                     System.exit(0);
                 }
-                catch (IOException e1) {
-                    e1.printStackTrace();
+                catch (IOException ex) {
+                    ex.printStackTrace();
                 }
 				finish();
 			}
